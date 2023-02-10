@@ -48,19 +48,20 @@ public class Person {
      * @return
      */
 
-    public double[] averageAgePerGender(List<Person> persons){
+    public static double[] averageAgePerGender(List<Person> persons){
 
         // If list persons is empty => average is 0 in both genders
         if (persons.isEmpty()){
             return new double[]{0, 0};
         }
 
+        // Lists of male ages and female ages
         List<Integer> maleAges = new ArrayList<Integer>();
         List<Integer> femaleAges = new ArrayList<Integer>();
 
         // Check all the list of persons and classify the ages
         for (Person p:persons){
-            if (p.gender.compareTo("female") == 0){
+            if (p.gender.contains("f") || p.gender.contains("F")){
                 femaleAges.add(p.age);
             } else {
                 maleAges.add(p.age);
@@ -68,15 +69,23 @@ public class Person {
         }
 
         // Average of genders
-        double averageMale = average(maleAges);
-        double averageFemale = average(femaleAges);
+        double averageMale = 0;
+        if (!maleAges.isEmpty()){
+            averageMale = average(maleAges);
+        }
+
+        double averageFemale = 0;
+        if (!femaleAges.isEmpty()){
+            averageFemale = average(femaleAges);
+        }
+
 
         return new double[]{averageMale, averageFemale};
     }
 
     // Calculate average of a list of ages (integer)
-    private double average(List<Integer> ages){
-        int sum = 0;
+    public static double average(List<Integer> ages){
+        float sum = 0;
         double average;
 
         for (Integer age:ages){
