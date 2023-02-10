@@ -10,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests cases
+ * averageAgePerGender method tests cases
+ *
  * 1. Parameter null -> NullListException
  * 2. Empty list of people -> {0,0}
  * 3. No males in list -> {0,average}
@@ -19,6 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * 6. Normal case, some males and some females -> {average,average}
  * 7. Impossibly ages(more than 120, less than 0 or null values) are discarded
  *      -> {average,average} without unusual values
+ *
+ * getters methods tests cases
+ * 8. getName -> Person name
+ * 9. getAge -> Person age
+ * 10. getGender -> Person gender
  */
 
 public class PersonTest {
@@ -133,6 +139,27 @@ public class PersonTest {
         double[] obtainedValue = Person.averageAgePerGender(persons);
         double[] expedtedValue = {31.5,31.5};
         assertTrue(Arrays.equals(obtainedValue,expedtedValue));
+    }
+
+    @Test // 8
+    void testPersonGetNameIsName(){
+        String obtanedValue = male1.getName();
+        String expedtedValue = "name1";
+        assertEquals(obtanedValue,expedtedValue);
+    }
+
+    @Test // 9
+    void testPersonGetAgeIsAge(){
+        int obtanedValue = male1.getAge();
+        int expedtedValue = 30;
+        assertEquals(obtanedValue,expedtedValue);
+    }
+
+    @Test // 10
+    void testPersonGetGenderIsGender(){
+        String obtanedValue = male1.getGender();
+        String expedtedValue = "m";
+        assertEquals(obtanedValue,expedtedValue);
     }
 
 }
