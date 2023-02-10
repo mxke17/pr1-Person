@@ -11,17 +11,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests cases
- * 1. Empty list of people
- * 2. No males in list
- * 3. No females in list
- * 4. Only one male and one female
- * 5. Normal case, some males and some females
- * 6. Check that impossibly ages(more than 120, less than 0 or null values) are discarted
+ * 1. Parameter null -> NullListException
+ * 2. Empty list of people -> {0,0}
+ * 3. No males in list -> {0,average}
+ * 4. No females in list -> {average,0}
+ * 5. Only one male and one female -> {MaleAge,FemaleAge}
+ * 6. Normal case, some males and some females -> {average,average}
+ * 7. Impossibly ages(more than 120, less than 0 or null values) are discarded
+ *      -> {average,average} without unusual values
  */
 
 public class PersonTest {
 
     List<Person> persons;
+    // MALES EXAMPLES
+    Person male1 = new Person("name1", 30, "m");
+    Person male2 = new Person("name2", 31, "M");
+    Person male3 = new Person("name3", 32, "m");
+    Person male4 = new Person("name4", 33, "M");
+    Person male5 = new Person("name5", 200, "m"); // Unusual value
+
+    //FEMALE EXAMPLES
+    Person female1 = new Person("name1", 30, "f");
+    Person female2 = new Person("name2", 31, "F");
+    Person female3 = new Person("name3", 32, "f");
+    Person female4 = new Person("name4", 33, "F");
+    Person female5 = new Person("name5", -1, "f");
+
+
+
 
 
     @BeforeEach
@@ -34,23 +52,24 @@ public class PersonTest {
         persons = null;
     }
 
-    @Test
-    void testPersonEmptyListOfPersons(){
+    @Test // 1
+    void testPersonParameterIsNullGivesAnException(){
+        assertThrows(NullListException.class, () -> Person.averageAgePerGender(null));
+    }
+
+    @Test // 2
+    void testPersonEmptyListOfPersonsIs0_0(){
         double[] obtainedValue = Person.averageAgePerGender(persons);
         double[] expedtedValue = {0,0};
 
         assertTrue(Arrays.equals(obtainedValue,expedtedValue));
     }
 
-    @Test
-    void testPersonNoMalesInList(){
-        Person female1 = new Person("name1", 30, "f");
+    @Test // 3
+    void testPersonNoMalesInListIs0_Average(){
         persons.add(female1);
-        Person female2 = new Person("name2", 31, "F");
         persons.add(female2);
-        Person female3 = new Person("name3", 32, "f");
         persons.add(female3);
-        Person female4 = new Person("name4", 33, "F");
         persons.add(female4);
 
         double[] obtainedValue = Person.averageAgePerGender(persons);
@@ -58,19 +77,61 @@ public class PersonTest {
         assertTrue(Arrays.equals(obtainedValue,expedtedValue));
     }
 
-    @Test
-    void testPersonNoFemalesInList(){
-        Person male1 = new Person("name1", 30, "m");
+    @Test // 4
+    void testPersonNoFemalesInListIsAverage_0(){
         persons.add(male1);
-        Person male2 = new Person("name2", 31, "M");
         persons.add(male2);
-        Person male3 = new Person("name3", 32, "m");
         persons.add(male3);
-        Person male4 = new Person("name4", 33, "M");
         persons.add(male4);
 
         double[] obtainedValue = Person.averageAgePerGender(persons);
         double[] expedtedValue = {31.5,0};
+        assertTrue(Arrays.equals(obtainedValue,expedtedValue));
+    }
+
+    @Test // 5
+    void testPersonOnlyOneMaleAndOneFemaleIsMaleAge_FemaleAge(){
+        persons.add(male1);
+        persons.add(female1);
+
+        double[] obtainedValue = Person.averageAgePerGender(persons);
+        double[] expedtedValue = {30,30};
+        assertTrue(Arrays.equals(obtainedValue,expedtedValue));
+    }
+
+    @Test // 6
+    void testPersonNormalCaseIsAverage_Average(){
+        persons.add(female1);
+        persons.add(female2);
+        persons.add(female3);
+        persons.add(female4);
+
+        persons.add(male1);
+        persons.add(male2);
+        persons.add(male3);
+        persons.add(male4);
+
+        double[] obtainedValue = Person.averageAgePerGender(persons);
+        double[] expedtedValue = {31.5,31.5};
+        assertTrue(Arrays.equals(obtainedValue,expedtedValue));
+    }
+
+    @Test // 7
+    void testPersonUnusualValuesAreDiscardedIsAverage_Average(){
+        persons.add(female1);
+        persons.add(female2);
+        persons.add(female3);
+        persons.add(female4);
+        persons.add(female5); // Unusual value
+
+        persons.add(male1);
+        persons.add(male2);
+        persons.add(male3);
+        persons.add(male4);
+        persons.add(male5); // Unusual value
+
+        double[] obtainedValue = Person.averageAgePerGender(persons);
+        double[] expedtedValue = {31.5,31.5};
         assertTrue(Arrays.equals(obtainedValue,expedtedValue));
     }
 
