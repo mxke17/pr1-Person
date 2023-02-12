@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *      -> {average,average} without unusual values
  *
  * getters methods tests cases
+ *
  * 8. getName -> Person name
  * 9. getAge -> Person age
  * 10. getGender -> Person gender
